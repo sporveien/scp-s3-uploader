@@ -3,6 +3,6 @@ MAX_LOGFILES: 10
 # Amount of hours to store transfered files in archive.
 ARCHIVE_RETENTION_TIME_HOURS: 1
 # Archive file settings
-ARCHIVE_FILE_PREFIX: hastus_
-ARCHIVE_FILE_EXTENSION: .zip
+ARCHIVE_FILE_PREFIX:
+ARCHIVE_FILE_EXTENSION:
 ARCHIVE_FILE_TIMESTAMP_FORMAT: "%Y.%d.%m-%H.%M.%S.%f"

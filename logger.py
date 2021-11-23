@@ -8,21 +8,21 @@ LOG_EXTENTSION = '.log'
 LOG_DATE_TIME_FORMAT = '%d%m%Y_%H%M%S'
 
 
-def path():
+def path(path):
     try:
         if operating_system() == "windows":
-            file_path = ".\\_log\\"
+            file_path = path + "\\"
         else:
-            file_path = "./_log/"
+            file_path = path + "/"
         return file_path
     except Exception as err_path:
         raise err_path
 
 
-def clean_up(max_logfiles):
+def clean_up(max_logfiles, log_root):
     try:
         counter = 0
-        log_path = path()
+        log_path = path(log_root)
         files = sorted(glob.glob(log_path + "*" + LOG_EXTENTSION))
         log_msg = str("{0} {1} file(s) in log path {2}").format(
             str(len(files)), LOG_EXTENTSION, log_path)
@@ -66,15 +66,16 @@ def clean_up(max_logfiles):
         logging.error(err_msg)
 
 
-def logger(max_logfiles):
+def logger(max_logfiles, log_root):
     try:
-        if not os.path.exists(path()):
-            os.makedirs(path())
-        log_filename = path() + datetime.datetime.now().strftime(LOG_DATE_TIME_FORMAT) + \
+        log_root_path = path(log_root)
+        if not os.path.exists(log_root_path):
+            os.makedirs(log_root_path)
+        log_filename = log_root_path + datetime.datetime.now().strftime(LOG_DATE_TIME_FORMAT) + \
             LOG_EXTENTSION
         logging.basicConfig(filename=log_filename, level=logging.DEBUG,
                             format='%(asctime)s;%(levelname)s;%(message)s')
-        clean_up(max_logfiles)
+        clean_up(max_logfiles, log_root_path)
     except Exception as err_logger:
         logging.error("Logger exception: %s", str(err_logger))
         raise err_logger

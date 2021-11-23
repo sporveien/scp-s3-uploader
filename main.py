@@ -26,7 +26,7 @@ def main():
         os.environ["AWS_SECRET_ACCESS_KEY"] = secrets['AWS_SECRET_KEY']
 
         # Start logger
-        logger(conf['MAX_LOGFILES'])
+        logger(conf['MAX_LOGFILES'], secrets['LOG_ROOT'])
 
         # Boto session
         logging.debug(
@@ -71,16 +71,19 @@ def main():
         #########################################################
 
         # Move files to temp folder to make sure files are not locked. E.g. being written to by another user / job
-        move_from_path = os.path.abspath(
-            os.getcwd()) + str(secrets["LOKAL_ROT"])
-        move_to_path = os.path.abspath(os.getcwd()) + str(secrets["TEMP_ROT"])
+        move_from_path = str(secrets["LOCAL_ROOT"])
+        move_to_path = str(secrets["TEMP_ROOT"])
+
         log_msg = str("Move files from {0} to {1}").format(
             move_from_path, move_to_path)
         logging.info(log_msg)
+
         moved_files = move_files(move_from_path, move_to_path)
+
         log_msg = str("Moved a total of {0} file(s)").format(
             str(len(moved_files)))
         logging.info(log_msg)
+
         if len(moved_files) < 1:
             log_warning = str(
                 "No files to upload since no file(s) were moved to {0}").format(move_to_path)
@@ -90,6 +93,7 @@ def main():
         # Upload to s3 bucket, files should now have been moved to the temp storage path
         upload_result = upload_to_bucket(
             moved_files, bucket, secrets['S3_KEY'])
+
         log_msg = str("Uploaded a total of {0} file(s) to s3 {1}").format(
             upload_result, bucket_name)
         logging.info(log_msg)
@@ -120,10 +124,11 @@ def main():
 
         # Clean up archive if every file moved to temp folder was uploaded to s3
         archive_retention_time = conf["ARCHIVE_RETENTION_TIME_HOURS"]
-        archive_path = os.path.abspath(os.getcwd()) + secrets["ARKIV_ROT"]
+        archive_path = os.path.abspath(os.getcwd()) + secrets["ARCHIVE_ROOT"]
         archive_file_prefix = conf["ARCHIVE_FILE_PREFIX"]
         archive_file_ext = conf["ARCHIVE_FILE_EXTENSION"]
         archive_file_timestamp_format = conf["ARCHIVE_FILE_TIMESTAMP_FORMAT"]
+
         remove_archive(archive_retention_time, archive_path, archive_file_prefix,
                        archive_file_ext, archive_file_timestamp_format)
 
