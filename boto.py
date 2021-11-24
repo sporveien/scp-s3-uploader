@@ -37,25 +37,35 @@ def get_bucket(boto_session, s3_bucket):
         raise err_get_bucket
 
 
-def upload_to_bucket(files, s3_bucket, object_name=None):
-    counter = 0
+def upload_to_bucket(files, s3_bucket, object_name):
+    files_uploaded = []
     for file in files:
+        if object_name is None:
+            s3_key = path.basename(file).replace(
+                "/", "").replace("\\", "")
+        else:
+            file_base_name = str(path.basename(
+                file).replace("/", "").replace("\\", ""))
+            s3_key = str(object_name + "/" + file_base_name)
+
         try:
-            if object_name is None:
-                object_name = path.basename(file)
-            else:
-                object_name = str(object_name) + "/" + str(path.basename(file))
             bucket_name = s3_bucket.name
+
             response = s3_bucket.put_object(
-                Body=file, Bucket=bucket_name, Key=object_name)
-            counter += 1
+                Body=file, Bucket=bucket_name, Key=s3_key)
+
+            files_uploaded.append(file)
+
             log_msg = str("Successfully uploaded {0} to s3 bucket {1} as {2}").format(
-                file, bucket_name, object_name)
+                file, bucket_name, s3_key)
             logging.info(log_msg)
             log_msg = str("Boto response: {0}").format(response)
             logging.debug(log_msg)
+
+            file_base_name = None
         except ClientError as err:
             err_msg = str("Failed to upload {0} to s3 bucket {1} key {2}. Boto client error: {3}").format(
-                file, s3_bucket, object_name, err)
+                file, s3_bucket, s3_key, err)
             logging.error(err_msg)
-    return counter
+        s3_key = ''
+    return files_uploaded

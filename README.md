@@ -15,6 +15,20 @@ pip install -r requirements.txt
 
 ## Running local test and debugging
 
+- Update secrets.yml file
+  - log directory --> LOG_ROOT
+  - temp directory --> TEMP_ROOT
+  - archive directory --> ARCHIVE_ROOT
+  - data directory --> DATA_ROOT
+
+```
+# secrets.yml file example
+LOG_ROOT: test/_log
+DATA_ROOT: test/data
+TEMP_ROOT: test/temp
+ARCHIVE_ROOT: test/archive
+```
+
 - Create directories
   - log directory
   - temp directory
@@ -22,20 +36,8 @@ pip install -r requirements.txt
   - data directory
 
 ```
-# Create directoris example
-mkdir _log test temp archive
-```
+# Run test.sh test.sh to setup test environment and run a quick test with some dummy data.
 
-- Update .yml file paths
-  - log directory --> LOG_ROOT
-  - temp directory --> TEMP_ROOT
-  - archive directory --> ARCHIVE_ROOT
-  - data directory --> LOKAL_ROT
+chmod +x test.sh && ./test.sh;
 
-```
-# Updated .yml file paths example
-LOG_ROOT: _log
-LOCAL_ROOT: test
-TEMP_ROOT: temp
-ARCHIVE_ROOT: archive
 ```
