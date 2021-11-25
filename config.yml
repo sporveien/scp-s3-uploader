@@ -9,20 +9,24 @@ ARCHIVE_FILES: True
 # Turn cleaning up archive on/off.
 CLEAN_UP_ARCHIVE: True
 # Archive file prefix
-ARCHIVE_FILE_PREFIX: ""
+ARCHIVE_FILE_PREFIX: "pre_"
 # Archive file suffix
-ARCHIVE_FILE_SUFFIX: ""
+ARCHIVE_FILE_SUFFIX: "_suf"
 # Archive file time stamp format
 ARCHIVE_FILE_TIMESTAMP_FORMAT: "%Y.%d.%m-%H.%M.%S.%f"
 # Use archive container
-ARCHIVE_CONTAINER: False
+ARCHIVE_CONTAINER: True
 # Archive container dir time stamp format
 ARCHIVE_CONTAINER_TIMESTAMP_FORMAT: "%Y.%d.%m-%H.%M.%S.%f"
 # Archive container dir prefix
-ARCHIVE_CONTAINER_PREFIX: pre_
+ARCHIVE_CONTAINER_PREFIX: "pre_"
 # Archive container dir suffix
-ARCHIVE_CONTAINER_SUFFIX: _suf
+ARCHIVE_CONTAINER_SUFFIX: "_suf"
 # Amount of hours to store transfered files in archive.
 ARCHIVE_RETENTION_TIME_HOURS: 1
 # Only manage the archive on fully completed uploads
 ONLY_ARCHIVE_ON_COMPLETE_UPLOAD: True
+# Log file extension
+LOG_FILE_EXTENTSION: ".log"
+# Log file time stamp format
+LOG_DATE_TIME_FORMAT: "%d%m%Y_%H%M%S"

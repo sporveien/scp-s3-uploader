@@ -11,20 +11,6 @@ if not getattr(__builtins__, "WindowsError", None):
         pass
 
 
-def get_subfolders(root_folder):
-    try:
-        all_files = []
-        for (file_path, dirs, files) in os.walk(root_folder):
-            if operating_system() == "windows":
-                all_files += [file_path + '\\' + dir for dir in dirs]
-            else:
-                all_files += [file_path + '/' + dir for dir in dirs]
-        return all_files
-    except Exception as err_get_files:
-        traceback.print_stack()
-        raise err_get_files
-
-
 def get_files(root_folder):
     try:
         all_files = []
@@ -123,15 +109,34 @@ def remove_archive(timelimit, archive_root, prefix, suffix, timestamp_format, re
                 file_no_ext = str(os.path.basename(
                     os.path.splitext(file)[0])).format()
                 if file_no_ext.startswith(prefix) and file_no_ext.endswith(suffix):
+                    log_msg = str(
+                        "Archive {0} starts with prefix {1} and suffix {2}").format(file, prefix, suffix)
+                    logging.info(log_msg)
                     try:
-                        timestamp = file.replace(
+                        timestamp = file_no_ext.replace(
                             prefix, "").replace(suffix, "")
+
+                        log_msg = str(
+                            "Archive file name time stamp: {0}").format(timestamp)
+                        logging.debug(log_msg)
+
                         archived_timestamp = datetime.strptime(
                             timestamp, timestamp_format)
+
+                        log_msg = str(
+                            "Formatted timestamp: {0}").format(timestamp)
+                        logging.debug(log_msg)
+
                         timelimit_timestamp = datetime.now() - timedelta(hours=timelimit)
+
+                        log_msg = str(
+                            "Archive retentaion time {0}.").format(timelimit_timestamp, timelimit)
+                        logging.debug(log_msg)
+
                     except Exception as err:
-                        log_warning = str("Failed to build date and time from directory {0}. Exception: {1}").format(
+                        log_warning = str("Failed to build date and time from file {0}. Exception: {1}").format(
                             file, err)
+                        traceback.print_stack()
                         logging.warning(log_warning)
                     else:
                         if archived_timestamp and timelimit_timestamp:
@@ -147,7 +152,7 @@ def remove_archive(timelimit, archive_root, prefix, suffix, timestamp_format, re
                                         "Remove {0}").format(archive_path_to_remove)
                                     logging.info(log_msg)
 
-                                    shutil.rmtree(archive_path_to_remove)
+                                    os.remove(archive_path_to_remove)
                                     cleaned_up.append(archive_path_to_remove)
 
                                     log_msg = str(
@@ -158,7 +163,6 @@ def remove_archive(timelimit, archive_root, prefix, suffix, timestamp_format, re
                                         "Failed to remove archive {0}. Exception {1}").format(archive_path_to_remove, err)
                                     logging.error(err_msg)
                                     traceback.print_stack()
-                                    raise err_msg
                             else:
                                 log_msg = str("Archive {0} has not exceeded archive retention time {1}").format(
                                     file, timelimit)
@@ -169,6 +173,6 @@ def remove_archive(timelimit, archive_root, prefix, suffix, timestamp_format, re
                             logging.warning(log_warning)
                 else:
                     log_warning = str(
-                        "file {0} does not start with prefix {1} and/or suffix {2}").format(file, prefix, suffix)
+                        "File {0} does not start with prefix {1} and/or suffix {2}").format(file, prefix, suffix)
                     logging.warning(log_warning)
     return cleaned_up

@@ -28,7 +28,8 @@ def main():
         os.environ["AWS_SECRET_ACCESS_KEY"] = secrets['AWS_SECRET_KEY']
 
         # Start logger
-        logger(conf['MAX_LOGFILES'], secrets['LOG_ROOT'])
+        logger(conf['MAX_LOGFILES'], secrets['LOG_ROOT'],
+               conf['LOG_FILE_EXTENTSION'], conf['LOG_DATE_TIME_FORMAT'])
 
         # Boto session
         logging.debug(
@@ -68,13 +69,13 @@ def main():
                 logging.info(
                     "GET request returned expected status code from url '%s'", bucket_url)
 
-            ###############    NEEDS SUDO RIGHTS ####################
+            ###############  ?  COULD NEED ELEVATION ? #################
             # Route tracing
             # trace_route_to = str(bucket) + ".s3.amazonaws.com"
             # logging.debug("Trace route to '%s'", trace_route_to)
             # route_trace_result = str(trace_route(trace_route_to))
             # logging.debug(route_trace_result)
-            #########################################################
+            ############################################################
 
         # Take No Action
         if conf["TAKE_NO_ACTION"]:
