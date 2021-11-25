@@ -10,6 +10,9 @@ def session(aws_access_key_id, aws_secret_access_key):
             aws_access_key_id=aws_access_key_id,
             aws_secret_access_key=aws_secret_access_key
         )
+        # Log everything. Change to 'INFO', or comment out to disable detailed AWS logging
+        boto3.set_stream_logger('', logging.INFO)
+
         if boto_session:
             return boto_session
     except Exception as err_session:
