@@ -1,3 +1,6 @@
+param(
+    [Parameter(Mandatory = $false)][switch]$only_generate_dummy_data
+)
 $PYCMD = @"
 import subprocess
 from datetime import datetime;
@@ -33,3 +36,7 @@ $Compress = @{
 Compress-Archive @Compress
 Set-Location -Path ..
 Clear-Host; python main.py
+if ($only_generate_dummy_data -ne $true)
+{
+    python main.py
+}

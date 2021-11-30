@@ -14,7 +14,11 @@ EXT="txt"
 mkdir "${ROOT_DIR}"
 cd "${ROOT_DIR}"
 mkdir log data archive temp
-printf '' > "data/${PREFIX}${OUTPUT}${SUFFIX}.${EXT}"
-zip "data/${PREFIX}${OUTPUT}${SUFFIX}.zip" "data/${PREFIX}${OUTPUT}${SUFFIX}.${EXT}"
-cd ..
+cd data
+pwd
+printf 'val1' > "2_${PREFIX}${OUTPUT}${SUFFIX}.${EXT}"
+printf 'val2' > "1_${PREFIX}${OUTPUT}${SUFFIX}.${EXT}"
+zip -r "${PREFIX}${OUTPUT}${SUFFIX}.zip" . -x ".*" -x "__MACOSX"
+rm *.$EXT
+cd ../.. 
 clear; python3 main.py

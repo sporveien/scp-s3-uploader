@@ -47,15 +47,16 @@ def upload_to_bucket(files, s3_bucket, object_name):
             s3_key = path.basename(file).replace(
                 "/", "").replace("\\", "")
         else:
+
             file_base_name = str(path.basename(
                 file).replace("/", "").replace("\\", ""))
-            s3_key = str(object_name + "/" + file_base_name)
 
+            s3_key = str(object_name + "/" + file_base_name)
         try:
             bucket_name = s3_bucket.name
 
             response = s3_bucket.put_object(
-                Body=file, Bucket=bucket_name, Key=s3_key)
+                Body=open(file, 'rb'), Bucket=bucket_name, Key=s3_key)
 
             files_uploaded.append(file)
 
