@@ -16,7 +16,8 @@ def clean_up(max_logfiles, log_root, log_ext):
     try:
         counter = 0
         log_path = path(log_root)
-        files = sorted(glob.glob(log_path + "*" + log_ext))
+        files = sorted(glob.glob(log_path + "*" + log_ext),
+                       key=os.path.getmtime)
         log_msg = str("{0} {1} file(s) in log path {2}").format(
             str(len(files)), log_ext, log_path)
         logging.info(log_msg)
